@@ -1,0 +1,38 @@
+{
+  "name": "lspdock",
+  "displayName": "lspdock",
+  "description": "LSP Docker Proxy",
+  "version": "0.1.0",
+  "publisher": "richardhapb",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:python"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "lspdock",
+      "properties": {
+        "lspdock.binaryPath": {
+          "type": "string",
+          "default": "lspdock",
+          "description": "Path to lspdock binary"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.80.0",
+    "typescript": "^5.0.0"
+  }
+}
