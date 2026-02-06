@@ -1,8 +1,8 @@
 {
-  "name": "lspdock",
-  "displayName": "lspdock",
+  "name": "LSPDock",
+  "displayName": "LSPDock",
   "description": "LSP Docker Proxy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "richardhapb",
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
   ],
   "icon": "icons/icon-128.png",
   "activationEvents": [
-    "*"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
