@@ -4,25 +4,92 @@
   "description": "LSP Docker Proxy",
   "version": "0.1.0",
   "publisher": "richardhapb",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/richardhapb/lspdock-vscode"
+  },
   "engines": {
     "vscode": "^1.80.0"
   },
   "categories": [
     "Programming Languages"
   ],
+  "icon": "icons/icon-128.png",
   "activationEvents": [
-    "onLanguage:python"
+    "*"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "configuration": {
       "type": "object",
-      "title": "lspdock",
+      "title": "LSPDock",
       "properties": {
+        "lspdock.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable LSPDock extension"
+        },
         "lspdock.binaryPath": {
           "type": "string",
-          "default": "lspdock",
-          "description": "Path to lspdock binary"
+          "default": "",
+          "description": "Path to lspdock binary. Leave empty to use bundled binary."
+        },
+        "lspdock.language": {
+          "type": "string",
+          "default": "python",
+          "description": "Language ID to activate the LSP for (e.g., python, typescript, go)"
+        },
+        "lspdock.configurationSections": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["python", "pyright"],
+          "description": "Configuration sections to synchronize with the LSP server"
+        },
+        "lspdock.container": {
+          "type": "string",
+          "default": "",
+          "description": "Docker container name or ID for attachment"
+        },
+        "lspdock.dockerPath": {
+          "type": "string",
+          "default": "",
+          "description": "Docker internal path (maps to -d/--docker-path)"
+        },
+        "lspdock.localPath": {
+          "type": "string",
+          "default": "",
+          "description": "Local path (maps to -L/--local-path)"
+        },
+        "lspdock.executable": {
+          "type": "string",
+          "default": "",
+          "description": "Executable for the LSP inside the container (maps to -e/--exec)"
+        },
+        "lspdock.pids": {
+          "type": "string",
+          "default": "",
+          "description": "PID patching: indicate the LSPs that require PID patching to null"
+        },
+        "lspdock.pattern": {
+          "type": "string",
+          "default": "",
+          "description": "Path pattern; this pattern indicates whether Docker will be used"
+        },
+        "lspdock.logLevel": {
+          "type": "string",
+          "enum": ["trace", "debug", "info", "warning", "error"],
+          "default": "",
+          "description": "Log level for lspdock"
+        },
+        "lspdock.extraArgs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Additional arguments to pass to the LSP (after --)"
         }
       }
     }
@@ -30,9 +97,14 @@
   "dependencies": {
     "vscode-languageclient": "^9.0.1"
   },
+  "scripts": {
+    "compile": "tsc",
+    "package": "vsce package --no-dependencies"
+  },
   "devDependencies": {
     "@types/node": "^18.0.0",
     "@types/vscode": "^1.80.0",
+    "@vscode/vsce": "^3.2.0",
     "typescript": "^5.0.0"
   }
 }

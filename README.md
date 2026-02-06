@@ -1,52 +1,90 @@
 # LSPDock
 
-VS Code extension that proxies LSP servers through [lspdock](https://github.com/richardhapb/lspdock), enabling language server support for code running inside Docker containers.
+VS Code extension that connects your editor to LSP servers running inside Docker containers.
 
-## Requirements
+## What it does
 
-`lspdock` binary must be in your PATH.
-
-### Unix/macOS
-
-```bash
-# Option 1: Move to a directory already in PATH
-sudo mv lspdock /usr/local/bin/
-
-# Option 2: Add its directory to PATH (add to ~/.bashrc or ~/.zshrc)
-export PATH="$PATH:/path/to/lspdock/directory"
-```
-
-### Windows
-
-```powershell
-# Option 1: Move to a directory in PATH
-move lspdock.exe C:\Windows\System32\
-
-# Option 2: Add to PATH via PowerShell (requires admin)
-[Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\path\to\lspdock\directory", "User")
-```
-
-Restart your terminal after modifying PATH.
+Your code lives locally, but your language server (pyright, typescript-language-server, gopls, etc.) runs inside a Docker container. LSPDock bridges the gap, translating paths between your local filesystem and the container.
 
 ## Installation
 
-```bash
-code --install-extension lspdock-0.0.1.vsix
-```
+Install from the VS Code marketplace or:
 
-Or in VS Code: `Cmd+Shift+P` → "Install from VSIX..."
+```bash
+code --install-extension lspdock-0.1.0.vsix
+```
 
 ## Configuration
 
-Create `lspdock.toml` in your project root (if it doesn't exist):
+Open VS Code settings (`Cmd+,` or `Ctrl+,`) and search for "lspdock".
 
-```toml
-container = "myapp-web-1"
-docker_internal_path = "/usr/src/app"
-local_path = "/Users/you/projects/myapp"
-executable = "pyright-langserver"
+### Required Settings
+
+| Setting | Description |
+|---------|-------------|
+| `lspdock.container` | Docker container name or ID |
+| `lspdock.dockerPath` | Path inside the container (e.g., `/app`) |
+| `lspdock.localPath` | Your local project path (e.g., `/Users/you/project`) |
+| `lspdock.executable` | LSP server command (e.g., `pyright-langserver`) |
+
+### Optional Settings
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `lspdock.enable` | `true` | Enable/disable the extension |
+| `lspdock.language` | `python` | Language to activate for |
+| `lspdock.configurationSections` | `["python", "pyright"]` | Config sections to sync |
+| `lspdock.pattern` | | Path pattern to determine Docker usage |
+| `lspdock.logLevel` | | `trace`, `debug`, `info`, `warning`, `error` |
+| `lspdock.extraArgs` | `[]` | Additional args passed to the LSP |
+| `lspdock.binaryPath` | | Custom path to lspdock binary |
+
+### Example: Python with Pyright
+
+```json
+{
+  "lspdock.container": "myapp-web-1",
+  "lspdock.dockerPath": "/app",
+  "lspdock.localPath": "/Users/you/myapp",
+  "lspdock.executable": "pyright-langserver",
+  "lspdock.language": "python",
+  "lspdock.configurationSections": ["python", "pyright"]
+}
+```
+
+### Example: TypeScript
+
+```json
+{
+  "lspdock.container": "myapp-node-1",
+  "lspdock.dockerPath": "/app",
+  "lspdock.localPath": "/Users/you/myapp",
+  "lspdock.executable": "typescript-language-server",
+  "lspdock.extraArgs": ["--stdio"],
+  "lspdock.language": "typescript",
+  "lspdock.configurationSections": ["typescript"]
+}
+```
+
+### Example: Go
+
+```json
+{
+  "lspdock.container": "myapp-go-1",
+  "lspdock.dockerPath": "/app",
+  "lspdock.localPath": "/Users/you/myapp",
+  "lspdock.executable": "gopls",
+  "lspdock.language": "go",
+  "lspdock.configurationSections": ["go", "gopls"]
+}
 ```
 
 ## Troubleshooting
 
-Check the output panel: `View` → `Output` → select `LSPDock Proxy` from dropdown.
+1. Open the Output panel: `View` → `Output`
+2. Select `LSPDock Proxy` from the dropdown
+3. Set `lspdock.logLevel` to `debug` or `trace` for more details
+
+## Links
+
+- [lspdock](https://github.com/richardhapb/lspdock) - The underlying proxy binary
